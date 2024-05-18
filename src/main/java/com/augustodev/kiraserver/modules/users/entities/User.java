@@ -22,11 +22,19 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", length = 50, nullable = false)
     private String lastName;
+
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)

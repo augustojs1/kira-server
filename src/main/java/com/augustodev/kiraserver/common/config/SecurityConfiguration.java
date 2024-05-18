@@ -26,7 +26,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                             authorizeHttpRequests
-                                    .requestMatchers("/auth/register", "/auth/authenticate")
+                                    .requestMatchers("/local/auth/signup", "/local/auth/signin")
                                     .permitAll()
                                     .anyRequest()
                                     .authenticated()

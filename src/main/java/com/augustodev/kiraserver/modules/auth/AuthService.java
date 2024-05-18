@@ -1,8 +1,8 @@
 package com.augustodev.kiraserver.modules.auth;
 
-import com.augustodev.kiraserver.modules.auth.dtos.AuthenticationRequest;
-import com.augustodev.kiraserver.modules.auth.dtos.AuthenticationResponse;
-import com.augustodev.kiraserver.modules.auth.dtos.RegisterRequest;
+import com.augustodev.kiraserver.modules.auth.dtos.SignInDto;
+import com.augustodev.kiraserver.modules.auth.dtos.SignInResponseDto;
+import com.augustodev.kiraserver.modules.auth.dtos.SignUpDto;
 import com.augustodev.kiraserver.modules.auth.strategies.JwtService;
 import com.augustodev.kiraserver.modules.users.UserRepository;
 import com.augustodev.kiraserver.modules.users.entities.User;
@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,13 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public SignInResponseDto register(SignUpDto request) {
+        boolean emailAlreadyExists = userRepository.findByEmail(request.getEmail()).isPresent();
+
+        if (emailAlreadyExists) {
+            throw new BadRequestException("User with this email already exists!");
+        }
+
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -34,13 +41,13 @@ public class AuthService {
 
         String jwtToken = jwtService.generateToken(user);
 
-        return  AuthenticationResponse
+        return  SignInResponseDto
                 .builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public SignInResponseDto authenticate(SignInDto request) throws BadRequestException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -52,7 +59,7 @@ public class AuthService {
 
         String jwtToken = jwtService.generateToken(user);
 
-        return  AuthenticationResponse
+        return  SignInResponseDto
                 .builder()
                 .token(jwtToken)
                 .build();
