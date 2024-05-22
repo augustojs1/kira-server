@@ -24,10 +24,12 @@
 
 ### #Boards
 
-- [ ] Users should be able to create a board.
-- [ ] Users should be able to invite users to a board.
-- [ ] Users should be able to remove a user from a board.
-- [ ] User creating board should be automatically assigned to board admin.
+- [x] Users should be able to create a board.
+- [x] User creating board should be automatically assigned to board admin.
+- [ ] Admin board user should be able edit board information.
+- [ ] Admin board user should be able to delete their boards.
+- [ ] Admin Users should be able to invite users to a board.
+- [ ] Admin Users should be able to remove a user from a board.
 - [ ] Admin board should change role of other.
 - [ ] Board members can list board members list.
 

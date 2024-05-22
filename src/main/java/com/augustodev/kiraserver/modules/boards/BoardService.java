@@ -4,7 +4,9 @@ import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.modules.boards.dtos.BoardCreatedDto;
 import com.augustodev.kiraserver.modules.boards.dtos.CreateBoardDto;
 import com.augustodev.kiraserver.modules.boards.entities.Board;
+import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
 import com.augustodev.kiraserver.modules.users.entities.User;
+import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardMemberRepository boardMemberRepository;
 
     public BoardCreatedDto createBoard(CreateBoardDto createBoardDto, User user) {
         Optional<Board> existentBoard = this.boardRepository.findByTitle(createBoardDto.getTitle());
@@ -30,6 +33,14 @@ public class BoardService {
                 .build();
 
         Board boardCreated = this.boardRepository.save(board);
+
+        BoardMembers boardMember = BoardMembers.builder()
+                .board(board)
+                .user(user)
+                .role(Role.ADMIN)
+                .build();
+
+        this.boardMemberRepository.save(boardMember);
 
         BoardCreatedDto response = BoardCreatedDto.builder()
                 .id(boardCreated.getId())
