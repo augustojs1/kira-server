@@ -11,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
@@ -37,5 +39,25 @@ public class BoardController {
         User user = (User) userDetails;
 
         return new ResponseEntity<>(this.boardService.update(boardId, updateBoardDto, user), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{boardId}")
+    public void deleteBoard(
+            @PathVariable Integer boardId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = (User) userDetails;
+
+        this.boardService.delete(boardId, user);
+    }
+
+    @GetMapping("/{boardId}/users")
+    public ResponseEntity<List<User>> getUsersFromBoard(
+            @PathVariable Integer boardId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(this.boardService.findUsers(boardId, user), HttpStatus.OK);
     }
 }

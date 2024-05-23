@@ -13,7 +13,9 @@ import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +76,39 @@ public class BoardService {
         Board boardUpdated = this.boardRepository.save(board);
 
         return new UpdateBoardDto(boardUpdated.getTitle(), boardUpdated.getDescription());
+    }
+
+    public void delete(Integer boardId, User user) {
+        Optional<Board> boardToDeleteOpt = this.boardRepository.findById(boardId);
+
+        if (boardToDeleteOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Board with this Id not found!");
+        }
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new UnauthorizedException("User does not have permission to update this board!");
+        }
+
+        Board board = boardToDeleteOpt.get();
+
+        this.boardRepository.delete(board);
+    }
+
+    public List<User> findUsers(Integer boardId, User user) {
+        Optional<Board> boardToFind = this.boardRepository.findById(boardId);
+
+        if (boardToFind.isEmpty()) {
+            throw new ResourceNotFoundException("Board with this Id not found!");
+        }
+
+        Optional<BoardMembers> boardMembers = this.boardMemberRepository.findByBoardIdAndUserId(boardId, user.getId());
+
+        if (boardMembers.isEmpty()) {
+            throw new UnauthorizedException("User is not a member of this board!");
+        }
+
+        List<BoardMembers> boardMembersList = this.boardMemberRepository.findByBoardId(boardId);
+
+        return boardMembersList.stream().map(BoardMembers::getUser).collect(Collectors.toList());
     }
 }
