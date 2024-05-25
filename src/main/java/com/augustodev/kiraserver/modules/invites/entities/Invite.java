@@ -2,6 +2,7 @@ package com.augustodev.kiraserver.modules.invites.entities;
 
 import com.augustodev.kiraserver.modules.boards.entities.Board;
 import com.augustodev.kiraserver.modules.users.entities.User;
+import com.augustodev.kiraserver.modules.users.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,13 +30,16 @@ public class Invite {
     @JoinColumn(name = "inviter_id")
     private User inviter;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invited_id")
     private User invited;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "accepted")
     private Boolean accepted;

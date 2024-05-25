@@ -24,6 +24,34 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardMemberRepository boardMemberRepository;
 
+    public Board findBoardByIdElseThrow(Integer boardId) {
+        Optional<Board> board = this.boardRepository.findById(boardId);
+
+        if (board.isEmpty()) {
+            throw new ResourceNotFoundException("Board with this Id not found!");
+        }
+
+        return board.get();
+    }
+
+    public void checkIfUserIsBoardAdminElseThrow(Integer boardId, Integer userId) {
+        BoardMembers boardMember = this.findUserAssociatedBoardElseThrow(boardId, userId);
+
+        if (boardMember.getRole() != Role.ADMIN) {
+            throw new UnauthorizedException("User is unauthorized to perform this action!");
+        }
+    }
+
+    public BoardMembers findUserAssociatedBoardElseThrow(Integer boardId, Integer userId) {
+        Optional<BoardMembers> boardMembers = this.boardMemberRepository.findByBoardIdAndUserId(boardId, userId);
+
+        if (boardMembers.isEmpty()) {
+            throw new UnauthorizedException("User is not a member of this board!");
+        }
+
+        return boardMembers.get();
+    }
+
     public BoardCreatedDto createBoard(CreateBoardDto createBoardDto, User user) {
         Optional<Board> existentBoard = this.boardRepository.findByTitle(createBoardDto.getTitle());
 
@@ -58,54 +86,34 @@ public class BoardService {
     }
 
     public UpdateBoardDto update(Integer boardId, UpdateBoardDto updateBoardDto, User user) {
-        Optional<Board> boardToUpdateOpt = this.boardRepository.findById(boardId);
-
-        if (boardToUpdateOpt.isEmpty()) {
-            throw new ResourceNotFoundException("Board with this Id not found!");
-        }
+        Board boardToUpdateOpt = this.findBoardByIdElseThrow(boardId);
 
         if (user.getRole() != Role.ADMIN) {
             throw new UnauthorizedException("User does not have permission to update this board!");
         }
 
-        Board board = boardToUpdateOpt.get();
+        boardToUpdateOpt.setTitle(updateBoardDto.getTitle());
+        boardToUpdateOpt.setDescription(updateBoardDto.getDescription());
 
-        board.setTitle(updateBoardDto.getTitle());
-        board.setDescription(updateBoardDto.getDescription());
-
-        Board boardUpdated = this.boardRepository.save(board);
+        Board boardUpdated = this.boardRepository.save(boardToUpdateOpt);
 
         return new UpdateBoardDto(boardUpdated.getTitle(), boardUpdated.getDescription());
     }
 
     public void delete(Integer boardId, User user) {
-        Optional<Board> boardToDeleteOpt = this.boardRepository.findById(boardId);
-
-        if (boardToDeleteOpt.isEmpty()) {
-            throw new ResourceNotFoundException("Board with this Id not found!");
-        }
+        Board boardToDeleteOpt = this.findBoardByIdElseThrow(boardId);
 
         if (user.getRole() != Role.ADMIN) {
             throw new UnauthorizedException("User does not have permission to update this board!");
         }
 
-        Board board = boardToDeleteOpt.get();
-
-        this.boardRepository.delete(board);
+        this.boardRepository.delete(boardToDeleteOpt);
     }
 
     public List<User> findUsers(Integer boardId, User user) {
-        Optional<Board> boardToFind = this.boardRepository.findById(boardId);
+        this.findBoardByIdElseThrow(boardId);
 
-        if (boardToFind.isEmpty()) {
-            throw new ResourceNotFoundException("Board with this Id not found!");
-        }
-
-        Optional<BoardMembers> boardMembers = this.boardMemberRepository.findByBoardIdAndUserId(boardId, user.getId());
-
-        if (boardMembers.isEmpty()) {
-            throw new UnauthorizedException("User is not a member of this board!");
-        }
+        this.findUserAssociatedBoardElseThrow(boardId, user.getId());
 
         List<BoardMembers> boardMembersList = this.boardMemberRepository.findByBoardId(boardId);
 
