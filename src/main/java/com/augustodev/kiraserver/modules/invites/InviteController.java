@@ -1,6 +1,7 @@
 package com.augustodev.kiraserver.modules.invites;
 
 import com.augustodev.kiraserver.modules.invites.dtos.InviteUserDto;
+import com.augustodev.kiraserver.modules.invites.dtos.UserInvitesDto;
 import com.augustodev.kiraserver.modules.invites.entities.Invite;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/invites")
@@ -25,5 +28,14 @@ public class InviteController {
             User user = (User) userDetails;
 
             return new ResponseEntity<>(this.inviteService.invite(user, inviteUserDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserInvitesDto>> getInvites(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(this.inviteService.findInvitesById(user.getId()), HttpStatus.OK);
     }
 }

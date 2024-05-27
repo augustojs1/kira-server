@@ -13,7 +13,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `boards` (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     title VARCHAR(100) NOT NULL UNIQUE,
     description VARCHAR(255) NOT NULL,
@@ -23,14 +23,37 @@ CREATE TABLE `boards` (
 
 CREATE TABLE `board_members` (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    board_id INT,
+    board_id INT NOT NULL,
     FOREIGN KEY (board_id) REFERENCES boards(id),
     role ENUM('USER', 'ADMIN') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `board_members`
+ADD CONSTRAINT `board_members_ibfk_2`
+FOREIGN KEY (`board_id`) REFERENCES `boards`(`id`)
+ON DELETE CASCADE;
+
 -- INSERT INTO board_members
 -- VALUES (1, 4, 2, 'ADMIN', '2024-05-21T01:28:17+00:00', '2024-05-21T01:28:17+00:00');
+
+-- ALTER TABLE `board_members` 
+-- DROP FOREIGN KEY `board_members_ibfk_2`;
+
+
+CREATE TABLE `invites` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    inviter_id INT NOT NULL,
+    FOREIGN KEY (inviter_id) REFERENCES users(id),
+    invited_id INT NOT NULL,
+    FOREIGN KEY (invited_id) REFERENCES users(id),
+    board_id INT NOT NULL,
+    FOREIGN KEY (board_id) REFERENCES boards(id),
+    role ENUM('USER', 'ADMIN') NOT NULL,
+    accepted BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

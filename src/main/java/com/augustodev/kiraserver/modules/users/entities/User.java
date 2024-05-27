@@ -2,6 +2,7 @@ package com.augustodev.kiraserver.modules.users.entities;
 
 import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
 import com.augustodev.kiraserver.modules.users.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
