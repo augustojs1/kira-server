@@ -28,9 +28,9 @@
 - [x] User creating board should be automatically assigned to board admin.
 - [x] Admin board user should be able edit board information.
 - [x] Admin board user should be able to delete their boards.
-- [ ] Admin Users should be able to invite users to a board.
-- [ ] Admin Users should be able to remove a user from a board.
-- [ ] Admin board should change role of other.
+- [x] Admin Users should be able to invite users to a board.
+- [ ] Admin users should be able to remove a user from a board.
+- [ ] Admin board users should be able change role of other board members.
 - [x] Board members can list board members list.
 
 ### #Board Members
@@ -38,8 +38,12 @@
 
 ### #Invite
 
-- [ ] Admin board user can invite other users to their board.
-- [ ] Invited users can deny or accept the invite.
+- [x] Admin board user can invite other users to their board.
+- [x] Users can fetch boards that he has been invited.
+- [ ] Invited users can deny an invite.
+- [x] Invited users can accept an invite.
+- [x] Users can fetch their sent invites.
+- [x] Users can fetch their received invites.
 - [ ] After accepting an invite, user should be that board member.
 
 ### #Status

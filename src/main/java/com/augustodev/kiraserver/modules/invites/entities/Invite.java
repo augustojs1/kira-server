@@ -34,12 +34,15 @@ public class Invite {
     @JoinColumn(name = "invited_id")
     private User invited;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "active", nullable = true)
+    private Boolean active;
 
     @Column(name = "accepted")
     private Boolean accepted;

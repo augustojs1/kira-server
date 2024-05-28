@@ -38,4 +38,25 @@ public class InviteController {
 
         return new ResponseEntity<>(this.inviteService.findInvitesById(user.getId()), HttpStatus.OK);
     }
+
+    @GetMapping("/sent")
+    public ResponseEntity<List<UserInvitesDto>> getSentInvites(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(this.inviteService.findSentInvites(user.getId()), HttpStatus.OK);
+    }
+
+    @PostMapping("/accept/{inviteId}")
+    public ResponseEntity acceptInvite(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer inviteId
+    ) {
+        User user = (User) userDetails;
+
+        this.inviteService.accept(user.getId(), inviteId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -3,6 +3,7 @@ package com.augustodev.kiraserver.modules.boards;
 import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.common.exceptions.ResourceNotFoundException;
 import com.augustodev.kiraserver.common.exceptions.UnauthorizedException;
+import com.augustodev.kiraserver.modules.boards.dtos.AssociateUserToBoardDto;
 import com.augustodev.kiraserver.modules.boards.dtos.BoardCreatedDto;
 import com.augustodev.kiraserver.modules.boards.dtos.CreateBoardDto;
 import com.augustodev.kiraserver.modules.boards.dtos.UpdateBoardDto;
@@ -118,5 +119,15 @@ public class BoardService {
         List<BoardMembers> boardMembersList = this.boardMemberRepository.findByBoardId(boardId);
 
         return boardMembersList.stream().map(BoardMembers::getUser).collect(Collectors.toList());
+    }
+
+    public void associateUserToBoard(User user, Board board, Role role) {
+        BoardMembers boardMember = BoardMembers.builder()
+                .user(user)
+                .board(board)
+                .role(role)
+                .build();
+
+        this.boardMemberRepository.save(boardMember);
     }
 }
