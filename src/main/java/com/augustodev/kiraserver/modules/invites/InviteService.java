@@ -68,8 +68,8 @@ public class InviteService {
         return this.invitesMapper.invitesToSlimDto(invites);
     }
 
-    public void accept(Integer userId, Integer inviteId) {
-        Optional<Invite> inviteOpt = this.inviteRepository.findById(inviteId);
+    public void accept(Integer inviteId) {
+        Optional<Invite> inviteOpt = this.inviteRepository.findByIdAndActiveIsTrue(inviteId);
 
         if (inviteOpt.isEmpty()) {
             throw new ResourceNotFoundException("Invite with this id not found!");
@@ -85,6 +85,21 @@ public class InviteService {
                invite.getBoard(),
                invite.getRole()
         );
+
+        this.inviteRepository.save(invite);
+    }
+
+    public void deny(Integer inviteId) {
+        Optional<Invite> inviteOpt = this.inviteRepository.findByIdAndActiveIsTrue(inviteId);
+
+        if (inviteOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Invite with this id not found or no active anymore!");
+        }
+
+        Invite invite = inviteOpt.get();
+
+        invite.setAccepted(false);
+        invite.setActive(false);
 
         this.inviteRepository.save(invite);
     }

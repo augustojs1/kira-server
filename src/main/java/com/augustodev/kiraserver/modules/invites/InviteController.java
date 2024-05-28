@@ -53,9 +53,17 @@ public class InviteController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Integer inviteId
     ) {
-        User user = (User) userDetails;
+        this.inviteService.accept(inviteId);
 
-        this.inviteService.accept(user.getId(), inviteId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/deny/{inviteId}")
+    public ResponseEntity denyInvite(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer inviteId
+    ) {
+        this.inviteService.deny(inviteId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
