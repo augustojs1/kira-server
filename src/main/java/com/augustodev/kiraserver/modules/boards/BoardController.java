@@ -1,9 +1,6 @@
 package com.augustodev.kiraserver.modules.boards;
 
-import com.augustodev.kiraserver.modules.boards.dtos.BoardCreatedDto;
-import com.augustodev.kiraserver.modules.boards.dtos.BoardDTO;
-import com.augustodev.kiraserver.modules.boards.dtos.CreateBoardDto;
-import com.augustodev.kiraserver.modules.boards.dtos.UpdateBoardDto;
+import com.augustodev.kiraserver.modules.boards.dtos.*;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -69,5 +66,18 @@ public class BoardController {
         User user = (User) userDetails;
 
         return new ResponseEntity<>(this.boardService.findUsers(boardId, user), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{boardId}/remove/{userId}")
+    public ResponseEntity deleteUserFromBoard(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer boardId,
+            @PathVariable Integer userId
+    ) {
+        User user = (User) userDetails;
+
+        this.boardService.removeUser(new RemoveUserFromBoardDto(user.getId(), userId, boardId));
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

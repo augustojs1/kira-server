@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -142,5 +143,43 @@ public class BoardService {
                 .build();
 
         this.boardMemberRepository.save(boardMember);
+    }
+
+    public void removeUser(RemoveUserFromBoardDto removeUserFromBoardDto) {
+        if (removeUserFromBoardDto.getUserId() == removeUserFromBoardDto.getMemberId()) {
+            throw new UnauthorizedException("User can not remove itself from a board!");
+        }
+
+        Optional<Board> boardOptional = this.boardRepository.findById(removeUserFromBoardDto.getBoardId());
+
+        if (boardOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Board with this id not found!");
+        }
+
+        Optional<BoardMembers> userOpt = this.boardMemberRepository.findByBoardIdAndUserId(
+                removeUserFromBoardDto.getBoardId(),
+                removeUserFromBoardDto.getUserId()
+        );
+
+        if (userOpt.isEmpty()) {
+            throw new UnauthorizedException("Current user is not a member of this board!");
+        }
+
+        BoardMembers currentUser = userOpt.get();
+
+        BoardMembers memberUser = this.findUserAssociatedBoardElseThrow(
+                removeUserFromBoardDto.getBoardId(),
+                removeUserFromBoardDto.getMemberId()
+                );
+
+        if (currentUser.getRole() != Role.ADMIN) {
+            throw new UnauthorizedException("Only board admins can operate this action!");
+        }
+
+        if (memberUser.getRole() == Role.ADMIN && !Objects.equals(currentUser.getId(), boardOptional.get().getId())) {
+            throw new UnauthorizedException("Only board owners can remove other board admin!");
+        }
+
+        this.boardMemberRepository.delete(memberUser);
     }
 }
