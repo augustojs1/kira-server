@@ -58,6 +58,14 @@ public class BoardService {
         return this.boardMapper.boardsToSlimDto(boardOpt);
     }
 
+    public void checkIfUserIsAlreadyABoardMember(Integer boardId, Integer invitedId) {
+        Optional<BoardMembers> boardMembersOpt = this.boardMemberRepository.findByBoardIdAndUserId(boardId, invitedId);
+
+        if (boardMembersOpt.isPresent()) {
+            throw new BadRequestException("User is already a board member!");
+        }
+    }
+
     public BoardCreatedDto createBoard(CreateBoardDto createBoardDto, User user) {
         Optional<Board> existentBoard = this.boardRepository.findByTitle(createBoardDto.getTitle());
 

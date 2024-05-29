@@ -7,8 +7,8 @@
 </h3>
 
 - [ ] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
-- [ ] Timestamp properties in MySQL tables.
-- [ ] REST API should use prefix: '/api/v1/'
+- [x] Timestamp properties in MySQL tables.
+- [x] REST API should use prefix: '/api/v1/'
 - [ ] Should feature a seeder for data.
 - [ ] Docker container for the database.
 - [ ] Docker container for the application.
@@ -31,7 +31,7 @@
 - [x] Admin Users should be able to invite users to a board.
 - [ ] Admin users should be able to remove a user from a board.
 - [ ] Admin board users should be able change role of other board members.
-- [ ] Users should be able to fetch what boards they are in.
+- [x] Users should be able to fetch what boards they are in.
 - [x] Board members can list board members list.
 
 ### #Board Members

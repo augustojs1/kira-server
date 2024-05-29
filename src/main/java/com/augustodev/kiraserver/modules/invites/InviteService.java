@@ -3,7 +3,6 @@ package com.augustodev.kiraserver.modules.invites;
 import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.common.exceptions.ResourceNotFoundException;
 import com.augustodev.kiraserver.modules.boards.BoardService;
-import com.augustodev.kiraserver.modules.boards.dtos.AssociateUserToBoardDto;
 import com.augustodev.kiraserver.modules.boards.entities.Board;
 import com.augustodev.kiraserver.modules.invites.dtos.InviteUserDto;
 import com.augustodev.kiraserver.modules.invites.dtos.UserInvitesDto;
@@ -42,6 +41,8 @@ public class InviteService {
         );
 
         User invitedUser = this.userService.findUserByIdElseThrow(inviteUserDto.getInvitedId());
+
+        this.boardService.checkIfUserIsAlreadyABoardMember(board.getId(), invitedUser.getId());
 
         this.findIfUserNotInvitedElseThrow(inviteUserDto.getInvitedId());
 
