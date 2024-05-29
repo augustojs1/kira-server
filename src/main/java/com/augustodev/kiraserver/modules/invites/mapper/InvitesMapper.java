@@ -20,6 +20,7 @@ public class InvitesMapper {
 
         return invites.stream()
                 .map(invite -> new UserInvitesDto(
+                        invite.getId(),
                         new UserSlimDto(invite.getInviter().getId(), invite.getInviter().getFirstName(), invite.getInviter().getLastName(), invite.getInviter().getEmail()),
                         new BoardSlimDto(invite.getBoard().getId(), invite.getBoard().getTitle(), invite.getBoard().getDescription()),
                         invite.getUpdatedAt(),

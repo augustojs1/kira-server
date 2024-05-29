@@ -31,6 +31,7 @@
 - [x] Admin Users should be able to invite users to a board.
 - [ ] Admin users should be able to remove a user from a board.
 - [ ] Admin board users should be able change role of other board members.
+- [ ] Users should be able to fetch what boards they are in.
 - [x] Board members can list board members list.
 
 ### #Board Members
@@ -40,11 +41,11 @@
 
 - [x] Admin board user can invite other users to their board.
 - [x] Users can fetch boards that he has been invited.
-- [ ] Invited users can deny an invite.
+- [x] Invited users can deny an invite.
 - [x] Invited users can accept an invite.
 - [x] Users can fetch their sent invites.
 - [x] Users can fetch their received invites.
-- [ ] After accepting an invite, user should be that board member.
+- [x] After accepting an invite, user should be that board member.
 
 ### #Status
 

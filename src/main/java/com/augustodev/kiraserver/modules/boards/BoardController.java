@@ -1,6 +1,7 @@
 package com.augustodev.kiraserver.modules.boards;
 
 import com.augustodev.kiraserver.modules.boards.dtos.BoardCreatedDto;
+import com.augustodev.kiraserver.modules.boards.dtos.BoardDTO;
 import com.augustodev.kiraserver.modules.boards.dtos.CreateBoardDto;
 import com.augustodev.kiraserver.modules.boards.dtos.UpdateBoardDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
@@ -28,6 +29,15 @@ public class BoardController {
         User user = (User) userDetails;
 
         return new ResponseEntity<>(this.boardService.createBoard(createBoardDto, user), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BoardDTO>> getBoards(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(this.boardService.findAssociateBoards(user.getId()), HttpStatus.OK);
     }
 
     @PutMapping("/{boardId}")

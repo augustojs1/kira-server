@@ -1,4 +1,4 @@
-package com.augustodev.kiraserver.modules.invites.dtos;
+package com.augustodev.kiraserver.modules.boards.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,11 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserInvitesDto {
+public class BoardDTO {
     private Integer id;
-    private UserSlimDto inviter;
-    private BoardSlimDto board;
+    private Integer userId;
+    private String title;
+    private String description;
     private Instant updatedAt;
     private Instant createdAt;
 }

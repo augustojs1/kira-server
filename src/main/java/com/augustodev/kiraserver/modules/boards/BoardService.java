@@ -3,12 +3,10 @@ package com.augustodev.kiraserver.modules.boards;
 import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.common.exceptions.ResourceNotFoundException;
 import com.augustodev.kiraserver.common.exceptions.UnauthorizedException;
-import com.augustodev.kiraserver.modules.boards.dtos.AssociateUserToBoardDto;
-import com.augustodev.kiraserver.modules.boards.dtos.BoardCreatedDto;
-import com.augustodev.kiraserver.modules.boards.dtos.CreateBoardDto;
-import com.augustodev.kiraserver.modules.boards.dtos.UpdateBoardDto;
+import com.augustodev.kiraserver.modules.boards.dtos.*;
 import com.augustodev.kiraserver.modules.boards.entities.Board;
 import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
+import com.augustodev.kiraserver.modules.boards.mapper.BoardMapper;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +22,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardMemberRepository boardMemberRepository;
+    private final BoardMapper boardMapper;
 
     public Board findBoardByIdElseThrow(Integer boardId) {
         Optional<Board> board = this.boardRepository.findById(boardId);
@@ -51,6 +50,12 @@ public class BoardService {
         }
 
         return boardMembers.get();
+    }
+
+    public List<BoardDTO> findAssociateBoards(Integer userId) {
+        Optional<BoardMembers> boardOpt = this.boardMemberRepository.findByUserId(userId);
+
+        return this.boardMapper.boardsToSlimDto(boardOpt);
     }
 
     public BoardCreatedDto createBoard(CreateBoardDto createBoardDto, User user) {

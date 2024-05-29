@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface BoardMemberRepository extends JpaRepository<BoardMembers, Integer> {
     Optional<BoardMembers> findByBoardIdAndUserId(Integer boardId, Integer userId);
     List<BoardMembers> findByBoardId(Integer boardId);
+    Optional<BoardMembers> findByUserId(Integer userId);
 }
