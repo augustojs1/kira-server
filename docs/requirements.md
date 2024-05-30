@@ -26,11 +26,11 @@
 
 - [x] Users should be able to create a board.
 - [x] User creating board should be automatically assigned to board admin.
-- [x] Admin board user should be able edit board information.
+- [x] Admin board user should be able to edit board information.
 - [x] Admin board user should be able to delete their boards.
 - [x] Admin Users should be able to invite users to a board.
-- [ ] Admin users should be able to remove a user from a board.
-- [ ] Admin board users should be able change role of other board members.
+- [x] Admin users should be able to remove a user from a board.
+- [x] Admin board users should be able to change role of other board members.
 - [x] Users should be able to fetch what boards they are in.
 - [x] Board members can list board members list.
 
@@ -41,11 +41,11 @@
 
 - [x] Admin board user can invite other users to their board.
 - [x] Users can fetch boards that he has been invited.
-- [x] Invited users can deny an invite.
-- [x] Invited users can accept an invite.
-- [x] Users can fetch their sent invites.
+- [x] Invited users can deny an invitation.
+- [x] Invited users can accept an invitation.
+- [x] Users can fetch invitations sent by them.
 - [x] Users can fetch their received invites.
-- [x] After accepting an invite, user should be that board member.
+- [x] After accepting an invitation, user should be that board member.
 
 ### #Status
 

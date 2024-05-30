@@ -1,6 +1,7 @@
 package com.augustodev.kiraserver.modules.boards;
 
 import com.augustodev.kiraserver.modules.boards.dtos.*;
+import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -79,5 +80,19 @@ public class BoardController {
         this.boardService.removeUser(new RemoveUserFromBoardDto(user.getId(), userId, boardId));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{boardId}/users/{userId}/admin")
+    public ResponseEntity<BoardMembers> changeUserRole(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer boardId,
+            @PathVariable Integer userId
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(
+                this.boardService.userToAdmin(new RemoveUserFromBoardDto(user.getId(), userId, boardId)),
+                HttpStatus.NO_CONTENT
+        );
     }
 }

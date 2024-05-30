@@ -182,4 +182,40 @@ public class BoardService {
 
         this.boardMemberRepository.delete(memberUser);
     }
+
+    public BoardMembers userToAdmin(RemoveUserFromBoardDto removeUserFromBoardDto) {
+        if (removeUserFromBoardDto.getUserId() == removeUserFromBoardDto.getMemberId()) {
+            throw new UnauthorizedException("User can not remove itself from a board!");
+        }
+
+        Optional<Board> boardOptional = this.boardRepository.findById(removeUserFromBoardDto.getBoardId());
+
+        if (boardOptional.isEmpty()) {
+            throw new ResourceNotFoundException("Board with this id not found!");
+        }
+
+        Optional<BoardMembers> userOpt = this.boardMemberRepository.findByBoardIdAndUserId(
+                removeUserFromBoardDto.getBoardId(),
+                removeUserFromBoardDto.getUserId()
+        );
+
+        if (userOpt.isEmpty()) {
+            throw new UnauthorizedException("Current user is not a member of this board!");
+        }
+
+        BoardMembers currentUser = userOpt.get();
+
+        BoardMembers memberUser = this.findUserAssociatedBoardElseThrow(
+                removeUserFromBoardDto.getBoardId(),
+                removeUserFromBoardDto.getMemberId()
+        );
+
+        if (currentUser.getRole() != Role.ADMIN) {
+            throw new UnauthorizedException("Only board admins can operate this action!");
+        }
+
+        memberUser.setRole(Role.ADMIN);
+
+        return this.boardMemberRepository.save(memberUser);
+    }
 }
