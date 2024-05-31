@@ -1,7 +1,5 @@
 USE `kira_database`;
 
-DROP TABLE `users`;
-
 CREATE TABLE `users` (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -57,3 +55,22 @@ CREATE TABLE `invites` (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE TABLE `status` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    board_id INT NOT NULL,
+    FOREIGN KEY (board_id) REFERENCES boards(id),
+    assigned_id INT,
+    FOREIGN KEY (assigned_id) REFERENCES users(id),
+    title VARCHAR(100) NOT NULL,
+    position INT NOT NULL,
+    CONSTRAINT chk_position CHECK (position >= 1 AND position <= 8),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `status`
+DROP FOREIGN KEY `status_ibfk_2`;
+
+ALTER TABLE `status`
+DROP COLUMN `assigned_id`;
