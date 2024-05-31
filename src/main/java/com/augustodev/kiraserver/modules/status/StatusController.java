@@ -1,5 +1,6 @@
 package com.augustodev.kiraserver.modules.status;
 
+import com.augustodev.kiraserver.modules.status.dtos.request.ChangeStatusPositionDto;
 import com.augustodev.kiraserver.modules.status.dtos.request.CreateStatusDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.CreateStatusResponseDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.StatusResponseDto;
@@ -37,5 +38,17 @@ public class StatusController {
         User user = (User) userDetails;
 
         return new ResponseEntity<>(this.statusService.findAllByBoardId(boardId, user.getId()), HttpStatus.OK);
+    }
+
+    @PatchMapping("/position")
+    public ResponseEntity changeStatusPosition(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody ChangeStatusPositionDto changeStatusPositionDto
+    ) {
+        User user = (User) userDetails;
+
+        this.statusService.changePosition(changeStatusPositionDto, user.getId());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

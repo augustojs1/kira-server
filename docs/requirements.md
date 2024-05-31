@@ -54,6 +54,7 @@
 - [ ] User should be able to see a list of status associated to board.
 - [x] A board should not have more than 8 different status.
 - [ ] Board admin can delete a status if no tasks are using that status.
+- [x] Create logic to user swap status position.
 
 ### #Tasks
 

@@ -26,6 +26,7 @@ public class BoardService {
     private final BoardMapper boardMapper;
 
     public Board findBoardByIdElseThrow(Integer boardId) {
+
         Optional<Board> board = this.boardRepository.findById(boardId);
 
         if (board.isEmpty()) {
