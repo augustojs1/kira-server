@@ -58,7 +58,7 @@
 
 ### #Tasks
 
-- [ ] Board members with admin permission should be able to create tasks.
+- [x] Board members with admin permission should be able to create tasks.
 - [ ] Tasks should have title, description, status from other board members.
 - [ ] Users can be assigned to tasks.
 - [ ] User assigned to task can change task status.

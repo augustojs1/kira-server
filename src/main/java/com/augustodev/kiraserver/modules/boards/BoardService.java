@@ -36,6 +36,12 @@ public class BoardService {
         return board.get();
     }
 
+    public void isBoardMemberBoardAdminElseThrow(BoardMembers boardMember) {
+        if (boardMember.getRole() != Role.ADMIN) {
+            throw new UnauthorizedException("User is unauthorized to perform this action!");
+        }
+    }
+
     public void checkIfUserIsBoardAdminElseThrow(Integer boardId, Integer userId) {
         BoardMembers boardMember = this.findUserAssociatedBoardElseThrow(boardId, userId);
 

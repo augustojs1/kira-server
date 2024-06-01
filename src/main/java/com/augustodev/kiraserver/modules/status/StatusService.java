@@ -24,7 +24,7 @@ public class StatusService {
     private final BoardService boardService;
     private final StatusRepository statusRepository;
 
-    private Status findStatusByIdElseThrow(Integer statusId) {
+    public Status findStatusByIdElseThrow(Integer statusId) {
         Optional<Status> statusOpt = this.statusRepository.findById(statusId);
 
         if (statusOpt.isEmpty()) {

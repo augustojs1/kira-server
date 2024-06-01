@@ -74,3 +74,17 @@ DROP FOREIGN KEY `status_ibfk_2`;
 
 ALTER TABLE `status`
 DROP COLUMN `assigned_id`;
+
+CREATE TABLE `tasks` (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    assigned_id INT,
+    FOREIGN KEY (assigned_id) REFERENCES users(id),
+    board_id INT NOT NULL,
+    FOREIGN KEY (board_id) REFERENCES boards(id),
+    status_id INT NOT NULL,
+    FOREIGN KEY (status_id) REFERENCES `status`(id),
+    title VARCHAR(150) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
