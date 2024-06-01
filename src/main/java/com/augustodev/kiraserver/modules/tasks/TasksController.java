@@ -1,5 +1,6 @@
 package com.augustodev.kiraserver.modules.tasks;
 
+import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.CreateTaskResponseDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
@@ -24,5 +25,22 @@ public class TasksController {
         User user = (User) userDetails;
 
         return new ResponseEntity<>(this.tasksService.create(createTaskDto, boardId, user), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{taskId}/assign/{assignId}")
+    public ResponseEntity<CreateTaskResponseDto> assign(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer taskId,
+            @PathVariable Integer assignId
+    ) {
+        User user = (User) userDetails;
+
+        AssignTaskDto assignTaskDto = AssignTaskDto.builder()
+                .assignUserId(assignId)
+                .currentUser(user)
+                .taskId(taskId)
+                .build();
+
+        return new ResponseEntity<>(this.tasksService.assign(assignTaskDto), HttpStatus.OK);
     }
 }
