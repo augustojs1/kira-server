@@ -1,6 +1,7 @@
 package com.augustodev.kiraserver.modules.tasks;
 
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.CreateTaskResponseDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
@@ -27,7 +28,7 @@ public class TasksController {
         return new ResponseEntity<>(this.tasksService.create(createTaskDto, boardId, user), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{taskId}/assign/{assignId}")
+    @PatchMapping("/board/{boardId}/task/{taskId}/assign/{assignId}")
     public ResponseEntity<CreateTaskResponseDto> assign(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Integer taskId,
@@ -42,5 +43,24 @@ public class TasksController {
                 .build();
 
         return new ResponseEntity<>(this.tasksService.assign(assignTaskDto), HttpStatus.OK);
+    }
+
+    @PatchMapping("/board/{boardId}/task/{taskId}/status/{statusId}")
+    public void changeTaskStatus(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer boardId,
+            @PathVariable Integer taskId,
+            @PathVariable Integer statusId
+    ) {
+        User user = (User) userDetails;
+
+        ChangeTaskStatusDto changeTaskStatusDto = ChangeTaskStatusDto.builder()
+                .user(user)
+                .taskId(taskId)
+                .statusId(statusId)
+                .boardId(boardId)
+                .build();
+
+        this.tasksService.changeTaskStatus(changeTaskStatusDto);
     }
 }

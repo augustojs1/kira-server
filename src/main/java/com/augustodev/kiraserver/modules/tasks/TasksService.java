@@ -1,12 +1,15 @@
 package com.augustodev.kiraserver.modules.tasks;
 
+import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.common.exceptions.ResourceNotFoundException;
+import com.augustodev.kiraserver.common.exceptions.UnauthorizedException;
 import com.augustodev.kiraserver.modules.boards.BoardService;
 import com.augustodev.kiraserver.modules.boards.entities.Board;
 import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
 import com.augustodev.kiraserver.modules.status.StatusService;
 import com.augustodev.kiraserver.modules.status.entities.Status;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.CreateTaskResponseDto;
 import com.augustodev.kiraserver.modules.tasks.entities.Task;
@@ -45,6 +48,10 @@ public class TasksService {
 
         Status status = this.statusService.findStatusByIdElseThrow(createTaskDto.getStatus_id());
 
+        if (!Objects.equals(board.getId(), status.getBoard().getId())) {
+            throw new BadRequestException("Status does not exists in this board!");
+        }
+
         Task task = Task.builder()
                 .title(createTaskDto.getTitle())
                 .description(createTaskDto.getDescription())
@@ -81,5 +88,24 @@ public class TasksService {
                 .title(updatedTask.getTitle())
                 .description(updatedTask.getDescription())
                 .build();
+    }
+
+    public void changeTaskStatus(ChangeTaskStatusDto changeTaskStatusDto) {
+        Task task = this.findTaskByIdElseThrow(changeTaskStatusDto.getTaskId());
+
+        Status newStatus = this.statusService.findStatusByIdElseThrow(changeTaskStatusDto.getStatusId());
+
+        BoardMembers boardMember = this.boardService.findUserAssociatedBoardElseThrow(
+                newStatus.getBoard().getId(),
+                changeTaskStatusDto.getUser().getId()
+        );
+
+        if (!Objects.equals(newStatus.getBoard().getId(), boardMember.getBoard().getId())) {
+            throw new BadRequestException("Status does not exists in this board!");
+        }
+
+        task.setStatus(newStatus);
+
+        this.tasksRepository.save(task);
     }
 }

@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AssignTaskDto {
-    private User currentUser;
-    private Integer taskId;
+public class ChangeTaskStatusDto {
+    private User user;
     private Integer boardId;
-    private Integer assignUserId;
+    private Integer taskId;
+    private Integer statusId;
 }
