@@ -35,7 +35,7 @@
 - [x] Board members can list board members list.
 
 ### #Board Members
-- [ ] Board members can assign themselves to tasks.
+- [x] Board members can assign themselves to tasks.
 
 ### #Invite
 
@@ -62,8 +62,7 @@
 - [x] Tasks should have title, description, status from other board members.
 - [x] Users can be assigned to tasks.
 - [x] Users can change task status.
-- [ ] List tasks assigned to a selected board member.
-- [ ] List tasks assigned to logged user.
+- [x] List tasks assigned to a selected board member.
 
 ### #Comments
 

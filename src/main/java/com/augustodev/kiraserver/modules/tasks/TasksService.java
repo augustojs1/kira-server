@@ -18,6 +18,7 @@ import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -107,5 +108,29 @@ public class TasksService {
         task.setStatus(newStatus);
 
         this.tasksRepository.save(task);
+    }
+
+    public List<CreateTaskResponseDto> findTasksByUserId(User currentUser, Integer boardId, Integer userId) {
+        this.boardService.findBoardByIdElseThrow(boardId);
+
+        if (Objects.equals(currentUser.getId(), userId)) {
+            this.boardService.findUserAssociatedBoardElseThrow(boardId, userId);
+        } else  {
+            this.boardService.findUserAssociatedBoardElseThrow(boardId,currentUser.getId());
+
+            this.boardService.findUserAssociatedBoardElseThrow(boardId, userId);
+        }
+
+        List<Task> tasks = this.tasksRepository.findByAssignedId(userId);
+
+        List<CreateTaskResponseDto> tasksSlimDto = tasks.stream()
+                .map(task ->
+                    new CreateTaskResponseDto(
+                            task.getTitle(),
+                            task.getDescription()
+                    )
+                ).toList();
+
+        return tasksSlimDto;
     }
 }
