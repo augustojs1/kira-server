@@ -2,7 +2,6 @@ package com.augustodev.kiraserver.modules.tasks;
 
 import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 import com.augustodev.kiraserver.common.exceptions.ResourceNotFoundException;
-import com.augustodev.kiraserver.common.exceptions.UnauthorizedException;
 import com.augustodev.kiraserver.modules.boards.BoardService;
 import com.augustodev.kiraserver.modules.boards.entities.Board;
 import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
@@ -11,8 +10,9 @@ import com.augustodev.kiraserver.modules.status.entities.Status;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
-import com.augustodev.kiraserver.modules.tasks.dtos.response.CreateTaskResponseDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.response.TasksResponseSlimDto;
 import com.augustodev.kiraserver.modules.tasks.entities.Task;
+import com.augustodev.kiraserver.modules.tasks.mapper.TaskMapper;
 import com.augustodev.kiraserver.modules.users.UserService;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,7 @@ public class TasksService {
     private final StatusService statusService;
     private final BoardService boardService;
     private final UserService userService;
+    private final TaskMapper taskMapper;
 
     public Task findTaskByIdElseThrow(Integer taskId) {
         Optional<Task> taskOpt = this.tasksRepository.findById(taskId);
@@ -40,7 +41,7 @@ public class TasksService {
         return taskOpt.get();
     }
 
-    public CreateTaskResponseDto create(CreateTaskDto createTaskDto, Integer boardId, User user) {
+    public TasksResponseSlimDto create(CreateTaskDto createTaskDto, Integer boardId, User user) {
         Board board = this.boardService.findBoardByIdElseThrow(boardId);
 
         BoardMembers boardMember = this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
@@ -62,13 +63,10 @@ public class TasksService {
 
         Task createdTask = this.tasksRepository.save(task);
 
-        return CreateTaskResponseDto.builder()
-                .title(createdTask.getTitle())
-                .description(createdTask.getDescription())
-                .build();
+        return this.taskMapper.map(createdTask);
     }
 
-    public CreateTaskResponseDto assign(AssignTaskDto assignTaskDto) {
+    public TasksResponseSlimDto assign(AssignTaskDto assignTaskDto) {
         Task task = this.findTaskByIdElseThrow(assignTaskDto.getTaskId());
 
         User userToAssign;
@@ -85,10 +83,7 @@ public class TasksService {
 
         Task updatedTask = this.tasksRepository.save(task);
 
-        return CreateTaskResponseDto.builder()
-                .title(updatedTask.getTitle())
-                .description(updatedTask.getDescription())
-                .build();
+        return this.taskMapper.map(updatedTask);
     }
 
     public void changeTaskStatus(ChangeTaskStatusDto changeTaskStatusDto) {
@@ -110,7 +105,7 @@ public class TasksService {
         this.tasksRepository.save(task);
     }
 
-    public List<CreateTaskResponseDto> findTasksByUserId(User currentUser, Integer boardId, Integer userId) {
+    public List<TasksResponseSlimDto> findTasksByUserId(User currentUser, Integer boardId, Integer userId) {
         this.boardService.findBoardByIdElseThrow(boardId);
 
         if (Objects.equals(currentUser.getId(), userId)) {
@@ -123,14 +118,6 @@ public class TasksService {
 
         List<Task> tasks = this.tasksRepository.findByAssignedId(userId);
 
-        List<CreateTaskResponseDto> tasksSlimDto = tasks.stream()
-                .map(task ->
-                    new CreateTaskResponseDto(
-                            task.getTitle(),
-                            task.getDescription()
-                    )
-                ).toList();
-
-        return tasksSlimDto;
+        return this.taskMapper.mapList(tasks);
     }
 }

@@ -3,7 +3,7 @@ package com.augustodev.kiraserver.modules.tasks;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
-import com.augustodev.kiraserver.modules.tasks.dtos.response.CreateTaskResponseDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.response.TasksResponseSlimDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import java.util.List;
 public class TasksController {
     private final TasksService tasksService;
     @PostMapping("/board/{boardId}")
-    public ResponseEntity<CreateTaskResponseDto> create(
+    public ResponseEntity<TasksResponseSlimDto> create(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Integer boardId,
             @RequestBody CreateTaskDto createTaskDto
@@ -31,7 +31,7 @@ public class TasksController {
     }
 
     @PatchMapping("/board/{boardId}/task/{taskId}/assign/{assignId}")
-    public ResponseEntity<CreateTaskResponseDto> assign(
+    public ResponseEntity<TasksResponseSlimDto> assign(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Integer taskId,
             @PathVariable Integer assignId
@@ -67,7 +67,7 @@ public class TasksController {
     }
 
     @GetMapping("/board/{boardId}/user/{userId}/task")
-    public ResponseEntity<List<CreateTaskResponseDto>> getUserTasks(
+    public ResponseEntity<List<TasksResponseSlimDto>> getUserTasks(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Integer boardId,
             @PathVariable Integer userId

@@ -5,11 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CreateTaskResponseDto {
+public class TasksResponseSlimDto {
+    private Integer id;
     private String title;
     private String description;
+    private Integer statusId;
+    private String statusName;
+    private Integer assignedId;
+    private String assignedName;
+    private Instant updatedAt;
+    private Instant createdAt;
 }

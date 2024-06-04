@@ -14,7 +14,7 @@ import java.util.Optional;
 public class InvitesMapper {
     public List<UserInvitesDto> invitesToSlimDto(Optional<Invite> invites) {
 
-        if (invites == null) {
+        if (invites.isEmpty()) {
             return  null;
         }
 

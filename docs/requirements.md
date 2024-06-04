@@ -63,6 +63,9 @@
 - [x] Users can be assigned to tasks.
 - [x] Users can change task status.
 - [x] List tasks assigned to a selected board member.
+- [ ] List a task by id.
+- [ ] Board admin can delete a task.
+- [] Board members can list all tasks from a board.
 
 ### #Comments
 
@@ -71,4 +74,4 @@
 
 ### #Users
 
-- [ ] Users can see their profile.
+- [x] Users can see their profile.
