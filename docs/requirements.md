@@ -64,13 +64,15 @@
 - [x] Users can change task status.
 - [x] List tasks assigned to a selected board member.
 - [ ] List a task by id.
-- [ ] Board admin can delete a task.
-- [] Board members can list all tasks from a board.
+- [x] Board admin can delete a task.
+- [x] Board members can list all tasks from a board.
 
 ### #Comments
 
 - [ ] Board members can add comments to board tasks.
-- [ ] Comment owner can delete or edit their comments.
+- [ ] Comment owner can delete their comments.
+- [ ] Comment owner can edit their comments.
+- [ ] Deleted tasks should delete related comments.
 
 ### #Users
 

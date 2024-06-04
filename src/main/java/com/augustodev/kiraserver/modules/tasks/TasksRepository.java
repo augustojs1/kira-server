@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface TasksRepository extends JpaRepository<Task, Integer> {
     Optional<Task> findById(Integer taskId);
     List<Task> findByAssignedId(Integer boardId);
+    List<Task> findByBoardId(Integer boardId);
 }

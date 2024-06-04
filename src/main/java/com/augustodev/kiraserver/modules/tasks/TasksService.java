@@ -120,4 +120,32 @@ public class TasksService {
 
         return this.taskMapper.mapList(tasks);
     }
+
+    public List<TasksResponseSlimDto> findTasksByBoardId(User user, Integer boardId) {
+        Board board = this.boardService.findBoardByIdElseThrow(boardId);
+
+        this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
+
+        List<Task> tasks = this.tasksRepository.findByBoardId(board.getId());
+
+        return this.taskMapper.mapList(tasks);
+    }
+
+//    public List<TasksResponseSlimDto> findTaskById(User user, Integer boardId, Integer taskId) {
+//        Board board = this.boardService.findBoardByIdElseThrow(boardId);
+//
+//        this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
+//    }
+
+    public void deleteTaskById(User user, Integer boardId, Integer taskId) {
+        Board board = this.boardService.findBoardByIdElseThrow(boardId);
+
+        BoardMembers boardMember = this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
+
+        this.boardService.isBoardMemberBoardAdminElseThrow(boardMember);
+
+        Task task = this.findTaskByIdElseThrow(taskId);
+
+        this.tasksRepository.delete(task);
+    }
 }
