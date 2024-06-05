@@ -11,6 +11,8 @@ import com.augustodev.kiraserver.modules.status.dtos.request.CreateStatusDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.CreateStatusResponseDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.StatusResponseDto;
 import com.augustodev.kiraserver.modules.status.entities.Status;
+import com.augustodev.kiraserver.modules.tasks.TasksService;
+import com.augustodev.kiraserver.modules.users.entities.User;
 import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -108,5 +110,21 @@ public class StatusService {
 
         this.statusRepository.save(statusOrigin);
         this.statusRepository.save(statusDestination);
+    }
+
+    public void deleteStatusById(User user, Integer statusId) {
+        Status status = this.findStatusByIdElseThrow(statusId);
+
+        Board board = this.boardService.findBoardByIdElseThrow(status.getBoard().getId());
+
+        this.boardService.checkIfUserIsBoardAdminElseThrow(board.getId(), user.getId());
+
+        List<Status> statusWithTasks = this.statusRepository.findTasksByStatusId(statusId);
+
+        if (!statusWithTasks.isEmpty()) {
+            throw new BadRequestException("Status with associated tasks can not be deleted!");
+        }
+
+        this.statusRepository.delete(status);
     }
 }

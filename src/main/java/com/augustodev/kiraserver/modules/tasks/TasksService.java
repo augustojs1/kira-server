@@ -41,6 +41,16 @@ public class TasksService {
         return taskOpt.get();
     }
 
+    public List<Task> findTasksByStatusIdElseThrow(Integer statusId) {
+        List<Task> tasks = this.tasksRepository.findByStatusId(statusId);
+
+        if (tasks.isEmpty()) {
+            throw new ResourceNotFoundException("Task with this id not found!");
+        }
+
+        return tasks;
+    }
+
     public TasksResponseSlimDto create(CreateTaskDto createTaskDto, Integer boardId, User user) {
         Board board = this.boardService.findBoardByIdElseThrow(boardId);
 

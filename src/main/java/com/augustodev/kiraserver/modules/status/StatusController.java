@@ -51,4 +51,16 @@ public class StatusController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{statusId}")
+    public ResponseEntity deleteStatus(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer statusId
+    ) {
+        User user = (User) userDetails;
+
+        this.statusService.deleteStatusById(user, statusId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
