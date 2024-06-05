@@ -70,8 +70,8 @@
 ### #Comments
 
 - [x] Board members can add comments to board tasks.
-- [ ] Comment owner can delete their comments.
-- [ ] Comment owner can edit their comments.
+- [x] Comment owner can delete their comments.
+- [x] Comment owner can edit their comments.
 - [ ] Deleted tasks should delete related comments.
 
 ### #Users

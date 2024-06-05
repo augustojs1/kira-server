@@ -29,4 +29,30 @@ public class TasksCommentsController {
                 HttpStatus.CREATED
         );
     }
+
+    @PatchMapping("/{taskId}")
+    public ResponseEntity<TaskCommentSlimDto> update(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody CreateTaskCommentDto createTaskCommentDto,
+            @PathVariable Integer taskId
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(
+                this.tasksCommentsService.update(createTaskCommentDto, user, taskId),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity delete(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer taskId
+    ) {
+        User user = (User) userDetails;
+
+        this.tasksCommentsService.delete(user, taskId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
