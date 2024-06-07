@@ -6,10 +6,10 @@
 	Non-Functional Requirements
 </h3>
 
-- [ ] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
+- [x] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
 - [x] Timestamp properties in MySQL tables.
 - [x] REST API should use prefix: '/api/v1/'
-- [ ] Should feature a seeder for data.
+- [x] Should use JWT for authentication.
 - [ ] Docker container for the database.
 - [ ] Docker container for the application.
 
@@ -63,7 +63,7 @@
 - [x] Users can be assigned to tasks.
 - [x] Users can change task status.
 - [x] List tasks assigned to a selected board member.
-- [ ] List a task by id.
+- [x] List a task by id and it's associated comments.
 - [x] Board admin can delete a task.
 - [x] Board members can list all tasks from a board.
 
@@ -72,7 +72,7 @@
 - [x] Board members can add comments to board tasks.
 - [x] Comment owner can delete their comments.
 - [x] Comment owner can edit their comments.
-- [ ] Deleted tasks should delete related comments.
+- [x] Deleted tasks should delete related comments.
 
 ### #Users
 

@@ -10,9 +10,12 @@ import com.augustodev.kiraserver.modules.status.entities.Status;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.response.TaskWithCommentsDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.TasksResponseSlimDto;
 import com.augustodev.kiraserver.modules.tasks.entities.Task;
 import com.augustodev.kiraserver.modules.tasks.mapper.TaskMapper;
+import com.augustodev.kiraserver.modules.tasks_comments.TasksCommentsRepository;
+import com.augustodev.kiraserver.modules.tasks_comments.entities.TaskComment;
 import com.augustodev.kiraserver.modules.users.UserService;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TasksService {
     private final TasksRepository tasksRepository;
+    private final TasksCommentsRepository tasksCommentsRepository;
     private final StatusService statusService;
     private final BoardService boardService;
     private final UserService userService;
@@ -141,11 +145,19 @@ public class TasksService {
         return this.taskMapper.mapList(tasks);
     }
 
-//    public List<TasksResponseSlimDto> findTaskById(User user, Integer boardId, Integer taskId) {
-//        Board board = this.boardService.findBoardByIdElseThrow(boardId);
-//
-//        this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
-//    }
+    public TaskWithCommentsDto findTaskById(User user, Integer boardId, Integer taskId) {
+        Board board = this.boardService.findBoardByIdElseThrow(boardId);
+
+        this.boardService.findUserAssociatedBoardElseThrow(board.getId(), user.getId());
+
+        Task task = findTaskByIdElseThrow(taskId);
+
+        List<TaskComment> taskComment = this.tasksCommentsRepository.findByTaskId(task.getId());
+
+        TaskWithCommentsDto taskWithCommentsDto = this.taskMapper.mapTaskWithComments(taskComment);
+
+        return taskWithCommentsDto;
+    }
 
     public void deleteTaskById(User user, Integer boardId, Integer taskId) {
         Board board = this.boardService.findBoardByIdElseThrow(boardId);

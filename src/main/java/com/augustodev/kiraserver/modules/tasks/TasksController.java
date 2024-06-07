@@ -3,6 +3,7 @@ package com.augustodev.kiraserver.modules.tasks;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.AssignTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.ChangeTaskStatusDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
+import com.augustodev.kiraserver.modules.tasks.dtos.response.TaskWithCommentsDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.TasksResponseSlimDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -87,16 +88,16 @@ public class TasksController {
         return new ResponseEntity<>(this.tasksService.findTasksByBoardId(user, boardId), HttpStatus.OK);
     }
 
-//    @GetMapping("/board/{boardId}/task/{taskId}")
-//    public ResponseEntity<List<TasksResponseSlimDto>> getBoardTasks(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @PathVariable Integer boardId,
-//            @PathVariable Integer taskId
-//    ) {
-//        User user = (User) userDetails;
-//
-//        return new ResponseEntity<>(this.tasksService.findTaskById(user, boardId, taskId), HttpStatus.OK);
-//    }
+    @GetMapping("/board/{boardId}/task/{taskId}")
+    public ResponseEntity<TaskWithCommentsDto> getTaskById(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer boardId,
+            @PathVariable Integer taskId
+    ) {
+        User user = (User) userDetails;
+
+        return new ResponseEntity<>(this.tasksService.findTaskById(user, boardId, taskId), HttpStatus.OK);
+    }
 
     @DeleteMapping("/board/{boardId}/task/{taskId}")
         public ResponseEntity deleteTask(
