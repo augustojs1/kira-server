@@ -1,4 +1,4 @@
-package com.augustodev.kiraserver.modules.boards.dtos;
+package com.augustodev.kiraserver.modules.boards.dtos.request;
 
 import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.AllArgsConstructor;

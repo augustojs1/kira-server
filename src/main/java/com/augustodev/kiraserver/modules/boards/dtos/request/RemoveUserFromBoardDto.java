@@ -1,5 +1,4 @@
-package com.augustodev.kiraserver.modules.boards.dtos;
-
+package com.augustodev.kiraserver.modules.boards.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class BoardCreatedDto {
-    private Integer id;
+public class RemoveUserFromBoardDto {
     private Integer userId;
-    private String title;
-    private String description;
+    private Integer memberId;
+    private Integer boardId;
 }

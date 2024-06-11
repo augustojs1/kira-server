@@ -1,9 +1,7 @@
 package com.augustodev.kiraserver.modules.boards.mapper;
 
-import com.augustodev.kiraserver.modules.boards.dtos.BoardDTO;
-import com.augustodev.kiraserver.modules.boards.entities.Board;
+import com.augustodev.kiraserver.modules.boards.dtos.response.BoardDTO;
 import com.augustodev.kiraserver.modules.boards.entities.BoardMembers;
-import com.augustodev.kiraserver.modules.invites.dtos.UserInvitesDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
