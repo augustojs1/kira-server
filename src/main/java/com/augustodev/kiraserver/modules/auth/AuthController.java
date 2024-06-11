@@ -1,10 +1,10 @@
 package com.augustodev.kiraserver.modules.auth;
 
-import com.augustodev.kiraserver.modules.auth.dtos.SignInDto;
-import com.augustodev.kiraserver.modules.auth.dtos.SignInResponseDto;
-import com.augustodev.kiraserver.modules.auth.dtos.SignUpDto;
+import com.augustodev.kiraserver.modules.auth.dtos.request.SignInDto;
+import com.augustodev.kiraserver.modules.auth.dtos.response.SignInResponseDto;
+import com.augustodev.kiraserver.modules.auth.dtos.request.SignUpDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +19,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignInResponseDto> register(
+            @Valid
             @RequestBody SignUpDto request
     ) {
         return ResponseEntity.ok(authService.register(request));
@@ -26,8 +27,9 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<SignInResponseDto> authenticateRequest(
+            @Valid
             @RequestBody SignInDto request
-    ) throws BadRequestException {
+    )  {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 }

@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/me")
-    public ResponseEntity<UserAuthDto> getMe(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = (User) userDetails;
+    public ResponseEntity<UserAuthDto> getMe(@AuthenticationPrincipal User user) {
 
         UserAuthDto currentUser = UserAuthDto.builder()
                 .id(user.getId())

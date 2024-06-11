@@ -1,8 +1,8 @@
 package com.augustodev.kiraserver.modules.auth;
 
-import com.augustodev.kiraserver.modules.auth.dtos.SignInDto;
-import com.augustodev.kiraserver.modules.auth.dtos.SignInResponseDto;
-import com.augustodev.kiraserver.modules.auth.dtos.SignUpDto;
+import com.augustodev.kiraserver.modules.auth.dtos.request.SignInDto;
+import com.augustodev.kiraserver.modules.auth.dtos.response.SignInResponseDto;
+import com.augustodev.kiraserver.modules.auth.dtos.request.SignUpDto;
 import com.augustodev.kiraserver.modules.auth.strategies.JwtService;
 import com.augustodev.kiraserver.modules.users.UserRepository;
 import com.augustodev.kiraserver.modules.users.entities.User;

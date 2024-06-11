@@ -32,9 +32,8 @@ public class InviteController {
 
     @GetMapping
     public ResponseEntity<List<UserInvitesDto>> getInvites(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user
     ) {
-        User user = (User) userDetails;
 
         return new ResponseEntity<>(this.inviteService.findInvitesById(user.getId()), HttpStatus.OK);
     }
