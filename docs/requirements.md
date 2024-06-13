@@ -51,7 +51,7 @@
 
 - [x] Board admin can create board tasks status up to 8 different status.
 - [x] Status should have a logical order of 1 up to 8.
-- [ ] User should be able to see a list of status associated to board.
+- [x] User should be able to see a list of status associated to board.
 - [x] A board should not have more than 8 different status.
 - [x] Board admin can delete a status if no tasks are using that status.
 - [x] Create logic to user swap status position.
