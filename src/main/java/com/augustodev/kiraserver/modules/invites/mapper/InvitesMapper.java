@@ -1,8 +1,8 @@
 package com.augustodev.kiraserver.modules.invites.mapper;
 
-import com.augustodev.kiraserver.modules.invites.dtos.BoardSlimDto;
-import com.augustodev.kiraserver.modules.invites.dtos.UserInvitesDto;
-import com.augustodev.kiraserver.modules.invites.dtos.UserSlimDto;
+import com.augustodev.kiraserver.modules.invites.dtos.response.BoardSlimDto;
+import com.augustodev.kiraserver.modules.invites.dtos.response.UserInvitesDto;
+import com.augustodev.kiraserver.modules.invites.dtos.response.UserSlimDto;
 import com.augustodev.kiraserver.modules.invites.entities.Invite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

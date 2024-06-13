@@ -6,6 +6,7 @@ import com.augustodev.kiraserver.modules.tasks.dtos.request.CreateTaskDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.TaskWithCommentsDto;
 import com.augustodev.kiraserver.modules.tasks.dtos.response.TasksResponseSlimDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +23,20 @@ public class TasksController {
     private final TasksService tasksService;
     @PostMapping("/board/{boardId}")
     public ResponseEntity<TasksResponseSlimDto> create(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Integer boardId,
-            @RequestBody CreateTaskDto createTaskDto
+            @Valid
+            @RequestBody CreateTaskDto createTaskDto,
+            @AuthenticationPrincipal User user,
+            @PathVariable Integer boardId
             ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.tasksService.create(createTaskDto, boardId, user), HttpStatus.CREATED);
     }
 
     @PatchMapping("/board/{boardId}/task/{taskId}/assign/{assignId}")
     public ResponseEntity<TasksResponseSlimDto> assign(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer taskId,
             @PathVariable Integer assignId
     ) {
-        User user = (User) userDetails;
-
         AssignTaskDto assignTaskDto = AssignTaskDto.builder()
                 .assignUserId(assignId)
                 .currentUser(user)
@@ -50,13 +48,11 @@ public class TasksController {
 
     @PatchMapping("/board/{boardId}/task/{taskId}/status/{statusId}")
     public void changeTaskStatus(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId,
             @PathVariable Integer taskId,
             @PathVariable Integer statusId
     ) {
-        User user = (User) userDetails;
-
         ChangeTaskStatusDto changeTaskStatusDto = ChangeTaskStatusDto.builder()
                 .user(user)
                 .taskId(taskId)
@@ -69,44 +65,36 @@ public class TasksController {
 
     @GetMapping("/board/{boardId}/user/{userId}/task")
     public ResponseEntity<List<TasksResponseSlimDto>> getUserTasks(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId,
             @PathVariable Integer userId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.tasksService.findTasksByUserId(user, boardId, userId), HttpStatus.OK);
     }
 
     @GetMapping("/board/{boardId}")
     public ResponseEntity<List<TasksResponseSlimDto>> getBoardTasks(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.tasksService.findTasksByBoardId(user, boardId), HttpStatus.OK);
     }
 
     @GetMapping("/board/{boardId}/task/{taskId}")
     public ResponseEntity<TaskWithCommentsDto> getTaskById(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId,
             @PathVariable Integer taskId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.tasksService.findTaskById(user, boardId, taskId), HttpStatus.OK);
     }
 
     @DeleteMapping("/board/{boardId}/task/{taskId}")
         public ResponseEntity deleteTask(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId,
             @PathVariable Integer taskId
     ) {
-        User user = (User) userDetails;
-
         this.tasksService.deleteTaskById(user, boardId, taskId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

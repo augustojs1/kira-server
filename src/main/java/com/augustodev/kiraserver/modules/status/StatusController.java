@@ -5,6 +5,7 @@ import com.augustodev.kiraserver.modules.status.dtos.request.CreateStatusDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.CreateStatusResponseDto;
 import com.augustodev.kiraserver.modules.status.dtos.response.StatusResponseDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,31 +23,27 @@ public class StatusController {
 
     @PostMapping
     public ResponseEntity<CreateStatusResponseDto> create(
-                @AuthenticationPrincipal UserDetails userDetails,
-                @RequestBody CreateStatusDto createStatusDto
+                @Valid
+                @RequestBody CreateStatusDto createStatusDto,
+                @AuthenticationPrincipal User user
             ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.statusService.create(createStatusDto, user.getId()), HttpStatus.CREATED);
     }
 
     @GetMapping("/board/{boardId}")
     public ResponseEntity<List<StatusResponseDto>> getStatus(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer boardId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(this.statusService.findAllByBoardId(boardId, user.getId()), HttpStatus.OK);
     }
 
     @PatchMapping("/position")
     public ResponseEntity changeStatusPosition(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody ChangeStatusPositionDto changeStatusPositionDto
+            @Valid
+            @RequestBody ChangeStatusPositionDto changeStatusPositionDto,
+            @AuthenticationPrincipal User user
     ) {
-        User user = (User) userDetails;
-
         this.statusService.changePosition(changeStatusPositionDto, user.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,11 +51,9 @@ public class StatusController {
 
     @DeleteMapping("/{statusId}")
     public ResponseEntity deleteStatus(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer statusId
     ) {
-        User user = (User) userDetails;
-
         this.statusService.deleteStatusById(user, statusId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

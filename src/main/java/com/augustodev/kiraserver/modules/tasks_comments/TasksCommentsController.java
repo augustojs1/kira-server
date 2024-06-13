@@ -3,27 +3,26 @@ package com.augustodev.kiraserver.modules.tasks_comments;
 import com.augustodev.kiraserver.modules.tasks_comments.dtos.request.CreateTaskCommentDto;
 import com.augustodev.kiraserver.modules.tasks_comments.dtos.response.TaskCommentSlimDto;
 import com.augustodev.kiraserver.modules.users.entities.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/task-comment")
 public class TasksCommentsController {
-    private  final   TasksCommentsService tasksCommentsService;
+    private final TasksCommentsService tasksCommentsService;
 
     @PostMapping("/task/{taskId}")
     public ResponseEntity<TaskCommentSlimDto> createTaskComment(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid
             @RequestBody CreateTaskCommentDto createTaskCommentDto,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer taskId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(
                 this.tasksCommentsService.create(createTaskCommentDto, user, taskId),
                 HttpStatus.CREATED
@@ -32,12 +31,11 @@ public class TasksCommentsController {
 
     @PatchMapping("/{taskId}")
     public ResponseEntity<TaskCommentSlimDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid
             @RequestBody CreateTaskCommentDto createTaskCommentDto,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer taskId
     ) {
-        User user = (User) userDetails;
-
         return new ResponseEntity<>(
                 this.tasksCommentsService.update(createTaskCommentDto, user, taskId),
                 HttpStatus.OK
@@ -46,11 +44,9 @@ public class TasksCommentsController {
 
     @DeleteMapping("/{taskId}")
     public ResponseEntity delete(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Integer taskId
     ) {
-        User user = (User) userDetails;
-
         this.tasksCommentsService.delete(user, taskId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

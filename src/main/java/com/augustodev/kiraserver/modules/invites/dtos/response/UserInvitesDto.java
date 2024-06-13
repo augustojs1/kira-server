@@ -1,4 +1,4 @@
-package com.augustodev.kiraserver.modules.invites.dtos;
+package com.augustodev.kiraserver.modules.invites.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
