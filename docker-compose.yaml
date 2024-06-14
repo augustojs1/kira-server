@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  server:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - kira-network
+    environment:
+      - spring.datasource.url=jdbc:mysql://database:3306/kira_database
+    depends_on:
+      - database
+
+    volumes:
+      - .data:/root/.data
+
+  database:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 4000:3306
+    networks:
+      - kira-network
+    environment:
+      MYSQL_DATABASE: kira_database
+      MYSQL_USER: kira_root
+      MYSQL_PASSWORD: lisanalgaib8899
+      MYSQL_ROOT_PASSWORD: lisanalgaib8899
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+networks:
+  kira-network:
