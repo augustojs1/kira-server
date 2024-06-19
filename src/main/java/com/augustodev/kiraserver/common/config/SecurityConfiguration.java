@@ -26,7 +26,14 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                             authorizeHttpRequests
-                                    .requestMatchers("/local/auth/signup", "/local/auth/signin")
+                                    .requestMatchers(
+                                            "/local/auth/signup",
+                                            "/local/auth/signin",
+                                            "/v3/api-docs",
+                                            "/v3/api-docs/**",
+                                            "/swagger-ui/**",
+                                            "/swagger-ui.html"
+                                    )
                                     .permitAll()
                                     .anyRequest()
                                     .authenticated()
