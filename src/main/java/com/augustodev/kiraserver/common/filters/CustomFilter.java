@@ -21,9 +21,8 @@ public class CustomFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-//        System.out.println("Request from: " + request.getRequestURI());
 
-        log.info("Request from: {} ", request.getRequestURI());
+        log.info("Request to: {} ", request.getRequestURI());
 
         filterChain.doFilter(request, response);
     }
