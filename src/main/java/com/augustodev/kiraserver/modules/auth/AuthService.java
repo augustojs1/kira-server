@@ -8,12 +8,14 @@ import com.augustodev.kiraserver.modules.users.UserRepository;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.augustodev.kiraserver.common.exceptions.BadRequestException;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -26,6 +28,7 @@ public class AuthService {
         boolean emailAlreadyExists = userRepository.findByEmail(request.getEmail()).isPresent();
 
         if (emailAlreadyExists) {
+            log.error("User with this email already exists!");
             throw new BadRequestException("User with this email already exists!");
         }
 
@@ -40,6 +43,8 @@ public class AuthService {
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
+
+        log.info("Succesfully created user!");
 
         return  SignInResponseDto
                 .builder()
@@ -58,6 +63,8 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
 
         String jwtToken = jwtService.generateToken(user);
+
+        log.info("Succesfully authenticate user!");
 
         return  SignInResponseDto
                 .builder()

@@ -14,6 +14,7 @@ import com.augustodev.kiraserver.modules.boards.mapper.BoardMapper;
 import com.augustodev.kiraserver.modules.users.entities.User;
 import com.augustodev.kiraserver.modules.users.enums.Role;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -34,6 +36,7 @@ public class BoardService {
         Optional<Board> board = this.boardRepository.findById(boardId);
 
         if (board.isEmpty()) {
+            log.error("Board with this Id not found!");
             throw new ResourceNotFoundException("Board with this Id not found!");
         }
 
@@ -42,6 +45,7 @@ public class BoardService {
 
     public void isBoardMemberBoardAdminElseThrow(BoardMembers boardMember) {
         if (boardMember.getRole() != Role.ADMIN) {
+            log.error("User is unauthorized to perform this action!");
             throw new UnauthorizedException("User is unauthorized to perform this action!");
         }
     }
@@ -50,6 +54,7 @@ public class BoardService {
         BoardMembers boardMember = this.findUserAssociatedBoardElseThrow(boardId, userId);
 
         if (boardMember.getRole() != Role.ADMIN) {
+            log.error("User is unauthorized to perform this action!");
             throw new UnauthorizedException("User is unauthorized to perform this action!");
         }
     }
@@ -58,6 +63,7 @@ public class BoardService {
         Optional<BoardMembers> boardMembers = this.boardMemberRepository.findByBoardIdAndUserId(boardId, userId);
 
         if (boardMembers.isEmpty()) {
+            log.error("User is not a member of this board!");
             throw new UnauthorizedException("User is not a member of this board!");
         }
 
@@ -74,6 +80,7 @@ public class BoardService {
         Optional<BoardMembers> boardMembersOpt = this.boardMemberRepository.findByBoardIdAndUserId(boardId, invitedId);
 
         if (boardMembersOpt.isPresent()) {
+            log.error("User is already a board member!");
             throw new BadRequestException("User is already a board member!");
         }
     }
@@ -82,6 +89,7 @@ public class BoardService {
         Optional<Board> existentBoard = this.boardRepository.findByTitle(createBoardDto.getTitle());
 
         if (existentBoard.isPresent()) {
+            log.error("Board with this title already exists!");
             throw new BadRequestException("Board with this title already exists!");
         }
 
@@ -108,6 +116,8 @@ public class BoardService {
                 .description(boardCreated.getDescription())
                 .build();
 
+        log.info("Successfully created board!");
+
         return response;
     }
 
@@ -115,6 +125,7 @@ public class BoardService {
         Board boardToUpdateOpt = this.findBoardByIdElseThrow(boardId);
 
         if (user.getRole() != Role.ADMIN) {
+            log.error("User does not have permission to update this board!");
             throw new UnauthorizedException("User does not have permission to update this board!");
         }
 
@@ -123,6 +134,8 @@ public class BoardService {
 
         Board boardUpdated = this.boardRepository.save(boardToUpdateOpt);
 
+        log.info("Successfully updated board!");
+
         return new UpdateBoardDto(boardUpdated.getTitle(), boardUpdated.getDescription());
     }
 
@@ -130,10 +143,12 @@ public class BoardService {
         Board boardToDeleteOpt = this.findBoardByIdElseThrow(boardId);
 
         if (user.getRole() != Role.ADMIN) {
+            log.error("User does not have permission to update this board!");
             throw new UnauthorizedException("User does not have permission to update this board!");
         }
 
         this.boardRepository.delete(boardToDeleteOpt);
+        log.info("Successfully deletee board!");
     }
 
     public List<User> findUsers(Integer boardId, User user) {
@@ -142,6 +157,8 @@ public class BoardService {
         this.findUserAssociatedBoardElseThrow(boardId, user.getId());
 
         List<BoardMembers> boardMembersList = this.boardMemberRepository.findByBoardId(boardId);
+
+        log.info("Successfully found board users!");
 
         return boardMembersList.stream().map(BoardMembers::getUser).collect(Collectors.toList());
     }
@@ -154,16 +171,20 @@ public class BoardService {
                 .build();
 
         this.boardMemberRepository.save(boardMember);
+
+        log.info("Successfully associated user to board!");
     }
 
     public void removeUser(RemoveUserFromBoardDto removeUserFromBoardDto) {
         if (removeUserFromBoardDto.getUserId() == removeUserFromBoardDto.getMemberId()) {
+            log.error("User can not remove itself from a board!");
             throw new UnauthorizedException("User can not remove itself from a board!");
         }
 
         Optional<Board> boardOptional = this.boardRepository.findById(removeUserFromBoardDto.getBoardId());
 
         if (boardOptional.isEmpty()) {
+            log.error("Board with this id not found!");
             throw new ResourceNotFoundException("Board with this id not found!");
         }
 
@@ -173,6 +194,7 @@ public class BoardService {
         );
 
         if (userOpt.isEmpty()) {
+            log.error("Current user is not a member of this board!");
             throw new UnauthorizedException("Current user is not a member of this board!");
         }
 
@@ -184,14 +206,19 @@ public class BoardService {
                 );
 
         if (currentUser.getRole() != Role.ADMIN) {
+            log.error("Only board admins can operate this action!");
             throw new UnauthorizedException("Only board admins can operate this action!");
         }
 
         if (memberUser.getRole() == Role.ADMIN && !Objects.equals(currentUser.getId(), boardOptional.get().getId())) {
+            log.error("Only board owners can remove other board admin!");
             throw new UnauthorizedException("Only board owners can remove other board admin!");
         }
 
         this.boardMemberRepository.delete(memberUser);
+
+        log.info("Successfully deleted board member!");
+
     }
 
     public BoardMembers userToAdmin(RemoveUserFromBoardDto removeUserFromBoardDto) {
