@@ -24,8 +24,8 @@ services:
     environment:
       MYSQL_DATABASE: kira_database
       MYSQL_USER: kira_root
-      MYSQL_PASSWORD: lisanalgaib8899
-      MYSQL_ROOT_PASSWORD: lisanalgaib8899
+      MYSQL_PASSWORD: kirapw
+      MYSQL_ROOT_PASSWORD: kirapw
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
 networks:

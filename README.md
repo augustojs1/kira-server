@@ -29,11 +29,35 @@
 
 Before you start, you should have installed in your machine the following tools:
 [Git](https://git-scm.com), [Java](https:///) and [Docker](https://www.docker.com/). Preferably Java version >= 17.
-To edit the code you can use a code editor like [VSCode](https://code.visualstudio.com/).
+To edit the code you can use a code editor like [VSCode](https://code.visualstudio.com/) or [InteliJ](https://www.jetbrains.com/pt-br/idea/).
 
 ### 🚀 Running Kira Server
 
-- Clone this repository
+- Clone this repository:
 ```bash
 git clone git@github.com:augustojs1/
 ```
+- Create a .env file and fill in or change the following keys as in .env.example file:
+```bash
+PORT=8080
+DATABASE_URL=jdbc:mysql://database:3306/kira_database
+DATABASE_USERNAME=kira_database
+DATABASE_PASSWORD=kira_root
+JWT_SECRET_KEY=
+JWT_EXPIRATION_TIME=
+```
+
+- By default, the MySQL container starts with the following credentials:
+```bash
+MYSQL_DATABASE: kira_database
+MYSQL_USER: kira_root
+MYSQL_PASSWORD: kirapw
+```
+
+- You can start the Docker containers running:
+```bash
+docker compose up
+```
+
+- By default application runs in the following port and path: http://localhost:8080/api/v1/ 
+- Swagger OpenAPI documentation can be found at: http://localhost:8080/api/v1/swagger-ui/index.html#/
