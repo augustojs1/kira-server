@@ -6,12 +6,21 @@
 	Non-Functional Requirements
 </h3>
 
+### V1
 - [x] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
 - [x] Timestamp properties in MySQL tables.
 - [x] REST API should use prefix: '/api/v1/'
 - [x] Should use JWT for authentication.
-- [ ] Docker container for the database.
-- [ ] Docker container for the application.
+- [x] Docker container for the database.
+- [x] Swagger OpenApi documentation.
+- [x] Docker container for the application.
+
+### V2
+- [ ] Add Kafka container.
+- [ ] Add notification-service microservice.
+- [ ] Add email-service microservice.
+- [ ] Add Unit and Integration tests.
+- [ ] Deploy application to AWS.
 
 <h3 align="center"> 
 	Functional Requirements
