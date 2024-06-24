@@ -36,6 +36,7 @@ CREATE TABLE `invites` (
                            FOREIGN KEY (inviter_id) REFERENCES users(id),
                            invited_id INT NOT NULL,
                            FOREIGN KEY (invited_id) REFERENCES users(id),
+                           active BOOLEAN NOT NULL DEFAULT TRUE,
                            board_id INT NOT NULL,
                            FOREIGN KEY (board_id) REFERENCES boards(id),
                            role ENUM('USER', 'ADMIN') NOT NULL,

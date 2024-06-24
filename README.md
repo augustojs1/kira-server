@@ -12,12 +12,13 @@
 
 ### Non-Functional Requirements
 
-- [ ] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
-- [ ] Timestamp properties in MySQL tables.
-- [ ] REST API should use prefix: '/api/v1/'
-- [ ] Should feature a seeder for data.
-- [ ] Docker container for the database.
-- [ ] Docker container for the application.
+- [x] Kira Server should be developed using the following technologies: Java 17, Spring Boot, MySQL and Docker.
+- [x] Timestamp properties in MySQL tables.
+- [x] REST API should use prefix: '/api/v1/'
+- [x] Should use JWT for authentication.
+- [x] Docker container for the database.
+- [x] Swagger OpenApi documentation.
+- [x] Docker container for the application.
 
 ### Functional Requirements
 [Requirements documentation](docs/requirements.md)
@@ -35,23 +36,16 @@ To edit the code you can use a code editor like [VSCode](https://code.visualstud
 
 - Clone this repository:
 ```bash
-git clone git@github.com:augustojs1/
+git clone git@github.com:augustojs1/kira-server
 ```
-- Create a .env file and fill in or change the following keys as in .env.example file:
+- Go to application.properties file and fill in the application environment variables:
 ```bash
-PORT=8080
-DATABASE_URL=jdbc:mysql://database:3306/kira_database
-DATABASE_USERNAME=kira_database
-DATABASE_PASSWORD=kira_root
-JWT_SECRET_KEY=
-JWT_EXPIRATION_TIME=
-```
-
-- By default, the MySQL container starts with the following credentials:
-```bash
-MYSQL_DATABASE: kira_database
-MYSQL_USER: kira_root
-MYSQL_PASSWORD: kirapw
+server.port=8080 # Default port
+app.env.jwt-secret-key= # Generate a valid key
+app.env.expiration-time= # Setup expiration time for the JWT token
+spring.datasource.url=jdbc:mysql://database:3306/kira_database # Default MySQL Docker container datasource URL
+spring.datasource.username=kira_root  # Default MySQL Docker container username
+spring.datasource.password=kirapw # Default MySQL Docker container password
 ```
 
 - You can start the Docker containers running:
