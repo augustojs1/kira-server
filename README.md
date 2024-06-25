@@ -7,8 +7,7 @@
 - [Kira Database Diagram](#kira-database-diagram)
 - [How To Run](#how-to-run)
     - [Requirements](#functional-requirements)
-    - [Running SuperSell Server](#-running-kira-server)
-- [Tests](#tests)
+    - [Running Kira Server](#-running-kira-server)
 
 ### Non-Functional Requirements
 
